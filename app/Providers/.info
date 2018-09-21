@@ -1,0 +1,11 @@
+AppServiceProvide:
+-- We use the boot method to include 
+	-> Schema::defaultStringLength(191);
+	   Limits the characters of string at laravel migrations
+
+	-> Events:
+	   Action that will happen when an event we declare goes off
+	   For example
+	   		Model::create(function($model) {
+	   			//code here
+	   		});

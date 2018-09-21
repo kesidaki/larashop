@@ -1,0 +1,3 @@
+The ApiResponser traits file contains the functions that will receive and forward in json format the database results as well as messages send by the developer
+
+Also contains the function that will transofmr results returned from the db, more for that on transformer/.info

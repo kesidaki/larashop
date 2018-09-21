@@ -1,0 +1,18 @@
+-- User
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `verified`, `verification_token`, `admin`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'Kostas Kesidis', 'kesidiskostas@gmail.com', '$2y$10$/R1qUE3nBcQxFBNEBzzi4eyTUL7Jn93w/UAt85ZDwoxG11QMKgSr.', '1', NULL, 'true', NULL, NULL, NULL, NULL);
+
+-- Categories
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'Υγεία & Ομορφιά', 'ygeia-omorfia', NULL, NULL, NULL, NULL);
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'Καλλυντικά', 'kallintika', NULL, NULL, NULL, NULL);
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'Αρώματα', 'aromata', NULL, NULL, NULL, NULL);
+
+-- Products
+INSERT INTO `products` (`id`, `sku`, `name`, `slug`, `description`, `quantity`, `status`, `image`, `seller_id`, `brand_id`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'a1', 'Αλόη 1', 'aloe-1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rhoncus velit in ornare efficitur. Nunc eget semper dolor. Morbi in dolor blandit, commodo erat et, posuere metus. Etiam efficitur eu urna id dapibus. Fusce sed ultrices tortor. Phasellus tortor leo, sagittis ac tellus non, eleifend congue nunc. Pellentesque hendrerit metus sed euismod aliquam. Nullam nec consectetur felis, vitae pulvinar sem. Maecenas ut mauris bibendum, malesuada mi at, finibus ex. Donec non euismod erat. Donec volutpat dapibus massa, eget aliquam nibh ullamcorper at. Donec vulputate molestie metus, sed egestas odio varius vulputate.\r\n\r\nDonec eu porta felis, eget varius nunc. Etiam nec est quis diam ultrices ultrices. In hac habitasse platea dictumst. Integer porttitor laoreet metus, id maximus dolor aliquet vitae. Morbi vestibulum magna eget semper viverra. In nunc orci, ultricies a cursus sit amet, tristique at urna. Cras nisi nunc, imperdiet id ullamcorper vel, sodales ut velit. Duis nunc neque, viverra sed mauris vitae, cursus semper arcu. Vestibulum risus magna, varius vitae facilisis sed, auctor et lectus. Cras eget turpis dapibus, hendrerit nisi nec, cursus enim. Sed odio neque, eleifend nec finibus ultricies, placerat non felis. Mauris congue, nibh in tristique volutpat, lectus magna interdum elit, ut tincidunt enim ante quis dolor. Phasellus commodo nunc nulla, sed pellentesque felis euismod ut. Donec eget nulla fringilla, porttitor ligula ac, pellentesque neque. Nam sed vulputate odio.\r\n\r\nSuspendisse feugiat orci vel mi scelerisque, ac semper leo fermentum. Cras consequat nulla in neque suscipit, quis consectetur turpis lobortis. Nunc ac sollicitudin velit, venenatis tincidunt metus. Etiam fermentum posuere lectus in porttitor. Etiam at urna scelerisque, laoreet dui a, imperdiet tortor. Praesent pharetra turpis in sagittis malesuada. Fusce pellentesque tortor sit amet scelerisque consequat.\r\n', '5', 'available', 'aloe.jpg', '1', NULL, NULL, NULL, NULL);
+
+-- Category Product
+INSERT INTO `category_product` (`category_id`, `product_id`, `deleted_at`) VALUES ('1', '1', NULL);
+INSERT INTO `category_product` (`category_id`, `product_id`, `deleted_at`) VALUES ('2', '1', NULL);
+
+-- Prices
+INSERT INTO `prices` (`id`, `product_id`, `price`, `description`, `created_at`, `updated_at`) VALUES (NULL, '1', '10', NULL, NULL, NULL);
+INSERT INTO `prices` (`id`, `product_id`, `price`, `description`, `created_at`, `updated_at`) VALUES (NULL, '1', '25', NULL, NULL, NULL);

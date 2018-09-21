@@ -1,0 +1,65 @@
+Transformer are classes that allow us to "transform" the results of a query.
+
+-- To install:
+composer require spatie/laravel-fractal
+
+-- To create transformer:
+php artisan make:transformer NameTransformer
+
+It gives us the ability to:
+-> Rename fields
+-> Change format of the result, for example
+	-> dates, return date in format d/m/Y H:i
+	-> combine name and last name in one field
+
+---------------------------------------------------------------------------------------------------------------------
+All the logic takes place in the public function transform
+
+-- It returns the newly formatted results, for example:
+return [
+    'identifier'   => (int) $myModel->id,
+    'name'         => (string) $myModel->name,
+    'creationDate' => (string) date('d/m/Y H:i', strtotime($myModel->created_at)),
+    'lastChanged'  => (string) date('d/m/Y H:i', strtotime($myModel->updated_at)),
+    'deletedDate'  => isset($myModel->deleted_at) ? (string) $myModel->deleted_at : null
+];
+
+-- To use it, go to model and define a public $transformer variable containing the Transformer class
+public $transformer = NameTransformer::class;
+
+-- Then, to traits return the transformed result
+For show all:
+	if ($collection->isEmpty()) {
+		return $this->successResponse(['data'=>$collection], $code);
+	}
+
+	$transformer = $collection->first()->transformer;
+	$collection  = $this->transformData($collection, $transformer);
+
+	return $this->successResponse($collection, $code);
+
+	First we check if the collection returned is empty. If so, just return the message. Else, take the transformer value from the first() result of the collection
+	Change the collection format by using the fractal method
+
+For show one:
+	$transformer = $model->transformer;
+	$model       = $this->transformData($model, $transformer);
+
+	return $this->successResponse($model, $code);
+
+	Since there is only 1 result here, take the transformer value from that result
+	Generate the transformed collection
+
+Transform Function:
+	protected function transformData($data, $transformer) {
+		$transformation = fractal($data, new $transformer);
+
+		return $transformation->toArray();
+	}
+
+---------------------------------------------------------------------------------------------------------------------
+public static function originalAttribute: It is used to get the name of the original attribute
+
+---------------------------------------------------------------------------------------------------------------------
+On transform function we add a links array in which we include the links for all the HTTP Get Requests that can be done
+for this instance

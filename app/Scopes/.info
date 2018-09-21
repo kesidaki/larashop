@@ -1,0 +1,13 @@
+-- Scopes are constraints for a Model. They will automatically add certain limitations to the query results. After declaring a scope like this:
+
+public function apply(Builder $builder, Model $model) {
+	$builder->has('hasSomething');
+}
+
+-- Go to model and include the scope like:
+
+protected static function boot() {
+	parent::boot();
+
+	static::addGlobalScope(new NameScope);
+}

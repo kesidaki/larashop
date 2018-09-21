@@ -1,0 +1,25 @@
+-- Laravel Mailables are stored here
+php artisan make:mail mailClassName
+php artisan make:mail mailClassName -m emails.viewName
+
+-- Declare a public variable and through the constructor load a value to it
+
+-- Generate the email by:
+
+public function build() {
+    return $this->markdown('emails.welcome')->subject('Please confirm your account');
+}
+
+Markdown is a laravel template for emails. It automatically adds styling to our email content. Check email files to see what it is like
+
+-- To send an email from our Controller:
+Mail::to('email')->send(new mailClassName($model));
+
+-- If we want to retry sending the email in case it fails:
+retry(5, function() use ($model) {
+    Mail::to($model->email)->send(new UserCreated($model));
+}, 100);
+
+5        = number of tries
+function = action it will take
+100      = miliseconds between attempts

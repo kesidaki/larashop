@@ -1,0 +1,11 @@
+-- Middlewares defines actions that will automatically take place when sending and/or receiving a http request
+
+-- After creating a middleware we declare it in the kernel.php file
+
+-- Go to protected $routeMiddleware
+		Add to the array:
+			'middlewareName' => middlewarePath
+
+-- Go to $middlewareGroups and add the middlewareName to the array for web or api (both if you want)
+	If you want to pass variables to the middleware do it like this
+	'middlewareName:variableValue'
