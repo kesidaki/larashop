@@ -16,7 +16,7 @@
 </nav>
 <nav class="navbar navbar-bordered navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="{{url('/')}}"><img src="{{asset('img/logo.png')}}"></a>
+        <a class="navbar-brand" href="{{url('/')}}"><img src="{{asset('public/img/logo.png')}}"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
         </button>

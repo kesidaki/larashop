@@ -53,13 +53,13 @@
 		<div class="col-sm-12 credits">
 			<h4 class="text-center">Credits</h4>
 			<!--Laravel-->
-			<a href="https://laravel.com/" target="_blank"><img src="{{ url('img/credits/laravel.png') }}"></a>
+			<a href="https://laravel.com/" target="_blank"><img src="{{ asset('public/img/credits/laravel.png') }}"></a>
 			<!--Laravel-->
-			<a href="https://jquery.com/" target="_blank"><img src="{{ url('img/credits/JQuery.png') }}"></a>
+			<a href="https://jquery.com/" target="_blank"><img src="{{ asset('public/img/credits/JQuery.png') }}"></a>
 			<!--Laravel-->
-			<a href="http://getbootstrap.com/" target="_blank"><img src="{{ url('img/credits/bootstrap-4.png') }}"></a>
+			<a href="http://getbootstrap.com/" target="_blank"><img src="{{ asset('public/img/credits/bootstrap-4.png') }}"></a>
 			<!--Laravel-->
-			<a href="https://sass-lang.com/" target="_blank"><img src="{{ url('img/credits/sass.png') }}"></a>
+			<a href="https://sass-lang.com/" target="_blank"><img src="{{ asset('public/img/credits/sass.png') }}"></a>
 		</div>
 	</div>
 

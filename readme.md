@@ -12,3 +12,5 @@ An eshop (work in progress) made on Laravel, using jQuery and Bootstrap 4.
 Konstantinos Kesidis  
 Junior Web Developer  
 [kesidis-kostas.gr](https://kesidis-kostas.gr)
+
+Demo: [larashop.kesidis-kostas.gr/](http://larashop.kesidis-kostas.gr/)

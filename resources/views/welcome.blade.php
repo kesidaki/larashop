@@ -38,7 +38,7 @@ main { margin-top: 0; }
                         <a href="{{url('product/'.$line->product->slug)}}">
                             <img 
                             class="card-img-top" 
-                            src="{{asset('thumbnail/'.$line->product->image)}}" 
+                            src="{{asset('public/thumbnail/'.$line->product->image)}}" 
                             alt="{{$line->product->name}}">
                         </a>
                     </div>

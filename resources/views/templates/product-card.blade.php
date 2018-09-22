@@ -11,7 +11,7 @@
 		<!--<div class="card-image">-->
 		<div class="card-image">
 			<a href="{{url('product/'.$product->slug)}}">
-				<img class="card-img-top" src="{{asset('thumbnail/'.$product->image)}}" alt="{{ $product->name }}">
+				<img class="card-img-top" src="{{asset('public/thumbnail/'.$product->image)}}" alt="{{ $product->name }}">
 			</a>
 		</div>
 		<div class="card-body">

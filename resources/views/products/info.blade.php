@@ -72,7 +72,7 @@ span.bold { font-size: 28px; position: relative; top: -8px; }
 	<div class="row mb-5">
 		<div class="col-sm-12 col-md-5 col-lg-4 h-100">
 			<div class="card">
-				<img class="card-img-top" src="{{asset('products/'.$product->image)}}" alt="{{$product->name}}">
+				<img class="card-img-top" src="{{asset('public/products/'.$product->image)}}" alt="{{$product->name}}">
 			</div>
 		</div>
 

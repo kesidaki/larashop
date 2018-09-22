@@ -12,11 +12,11 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    {{-- <link href="{{ asset('css/minified.css') }}?1" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}?1" rel="stylesheet"> --}}
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/minified.css') }}?1" rel="stylesheet">
+    <link href="{{ asset('public/css/style.css') }}?1" rel="stylesheet">
+    {{-- <link href="{{ asset('public/css/app.css') }}" rel="stylesheet"> --}}
     @if ( (isset($nouislider)) && ($nouislider) )
-    <link href="{{ asset('css/nouislider.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/nouislider.min.css') }}" rel="stylesheet">
     @endif
 
     <script>
@@ -52,20 +52,20 @@
         Scripts 
     -->
     <!--Load Page Scripts-->
-    {{-- <script src="{{ asset('js/minified.js') }}?1"></script>
-    <script src="{{ asset('js/script.js') }}?1"></script> --}}
-    <script src="{{ mix('js/app.js') }}?1"></script>
+    <script src="{{ asset('public/js/minified.js') }}?1"></script>
+    <script src="{{ asset('public/js/script.js') }}?1"></script>
+    {{-- <script src="{{ asset('js/app.js') }}?1"></script> --}}
     <!-- jQuery Custom Scroller CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
     @if (Auth::check() && Auth::user()->isAdmin())
         <!--Load Admin Scripts-->
-        <script src="{{ asset('js/admin.js') }}"></script>
+        <script src="{{ asset('public/js/admin.js') }}"></script>
     @endif
 
     <!--Load NoUISlider-->
     @if ( (isset($nouislider)) && ($nouislider) )
-        <script src="{{ asset('js/nouislider.min.js') }}"></script>
+        <script src="{{ asset('public/js/nouislider.min.js') }}"></script>
     @endif
 
     <!--Load ChartJS-->
