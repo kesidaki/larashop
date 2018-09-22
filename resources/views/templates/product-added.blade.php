@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-sm-12 col-md-4">
             <img class="card-img-top" 
-            src="{{asset('products/'.Session::get('productAdded')->image)}}" 
+            src="{{asset('public/products/'.Session::get('productAdded')->image)}}" 
             alt="{{Session::get('productAdded')->name}}">
           </div>
           <div class="col-sm-12 col-md-8">

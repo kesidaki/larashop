@@ -57,7 +57,7 @@ td.item-name img {
 							@foreach ($cart as $item)
 							<tr>
 								<td class="align-middle item-name">
-									<img src="{{asset('thumbnail/'.$item->options->img)}}">
+									<img src="{{asset('public/thumbnail/'.$item->options->img)}}">
 									{{$item->name}}
 								</td> 
 								</td>

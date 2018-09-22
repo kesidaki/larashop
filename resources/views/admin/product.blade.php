@@ -74,7 +74,7 @@
                     <div class="col-sm-12 col-md-4">
                         <div class="card"> 
                             @if ($product->image != '')
-                                <img class="card-img-top" src="{{asset('products/'.$product->image)}}">
+                                <img class="card-img-top" src="{{asset('public/products/'.$product->image)}}">
                             @else
                                 <div class="card-body">
                                     <p>Δεν υπάρχει εικόνα ακόμα!</p>
