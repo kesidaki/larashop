@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'AloeVeraOutlet'),
+    'name' => env('APP_NAME', 'Larashop'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/papaki/aloeveraoutlet.gr/'),
+    'url' => env('APP_URL', 'http://localhost/github/larashop/'),
 
     /*
     |--------------------------------------------------------------------------
