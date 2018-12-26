@@ -283,6 +283,22 @@ class ProductRepository extends Repository
 		return $product;
 	}
 
+	/**
+	 * Get Product by ID and price
+	 *
+	 * @param int $id
+	 * @param float $price
+	 * @return Object
+	 */
+	public function findForIdAndprice($id, $price)
+	{
+		return Product::where('id', $id)
+					  ->whereHas('prices', function($query) use ($price) {
+							$query->where('price', $price);
+					  })
+					  ->first();
+	}
+
 }
 
 ?>

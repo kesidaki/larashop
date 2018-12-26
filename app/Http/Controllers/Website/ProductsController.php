@@ -3,100 +3,37 @@
 namespace App\Http\Controllers\Website;
 
 use Illuminate\Http\Request;
-use App\Eloquent\ActionRepository;
-use App\Eloquent\ProductRepository;
-use App\Eloquent\CategoryRepository;
-use App\Eloquent\SubcategoryRepository;
-use App\Traits\CollectionManipulationTrait;
+use App\Services\ProductService;
+use App\Services\ActionService;
 
 class ProductsController extends Controller
 {
-    use CollectionManipulationTrait;
-
-	public $products;
-    public $categories;
-    public $subcategories;
-    public $actions;
-
-    public function __construct(ProductRepository $resProduct, CategoryRepository $resCategory, SubcategoryRepository $resSubcategory, ActionRepository $resAction) 
-    {
-        $this->products      = $resProduct;
-        $this->categories    = $resCategory;
-        $this->subcategories = $resSubcategory;
-        $this->actions       = $resAction;
-    }
-
     /**
     * Products Page
     * @param cat1
     * @param cat2
     * @param cat3
     * @param request
+    * @param ProductService
     */
-    public function index($cat1='', $cat2='', $cat3='', Request $request) 
+    public function index($cat1='', $cat2='', $cat3='', Request $request, ProductService $productService) 
     {
-        // Data: Product Categories
-        $categories = [];
-        if ($cat1 != '') {
-            array_push($categories, $cat1);
-        }
-        if ($cat2 != '') {
-            array_push($categories, $cat2);
-        }
-        if ($cat3 != '') {
-            array_push($categories, $cat3);
-        }
-
-        // Data: Product Subcategories
-        if ($request->get('categories') == '') {
-            $subcategories = [];
-        }
-        else {
-            $subcategories = explode(',',$request->get('categories'));
-        }
-
-        // Data: Filtered Products and the filters they provide
-        $products = $this->products->getProducts($categories, $subcategories, '', $request);
-        $prices   = $this->products->getMinMax($products);
-
-        // Data: Unfiltered Products and the filters they provide
-        $ufProducts = $this->products->getUnfilteredProducts($categories);
-        $subCats    = $this->products->getSubcategories($ufProducts, '');
-        $brands     = $this->products->getBrands($ufProducts);
-
-        // Further Products Manipulation
-        $products = $this->paginateData($products, 8);
-        $products = $this->cacheResponse($products);
-
-        // Send to View
-    	$data = [
-            'categories'      => implode('/' , $categories),
-    		'products'        => $products,
-            'active'          => [
-                'subcategories'   => implode(',' , $subcategories),
-                'brand'           => $request->brand,
-                'minPrice'        => ($request->minPrice != '') ? $request->minPrice : $prices['minPrice'],
-                'maxPrice'        => ($request->maxPrice != '') ? $request->maxPrice : $prices['maxPrice']
-            ],
-            'filter'          => [
-                'prices'          => $prices,
-                'avSubcategories' => $subCats,
-                'brands'          => $brands
-            ]
-    	];
+    	$data = $productService->prepareProductsIndex($cat1, $cat2, $cat3, $request);
 
     	return view('products.index', $data);
     }
 
     /**
-    * Search for product by term criteria
-    * @param term
-    */
-    public function search($term, Request $request) 
+     * Search for product by term criteria
+     *
+     * @param string $term
+     * @param Request $request
+     * @param ProductService $productService
+     * @return void
+     */
+    public function search($term, Request $request, ProductService $productService) 
     {
-        $products = $this->products->getProducts([], [], $term, $request);
-        $products = $this->paginateData($products);
-        $products = $this->cacheResponse($products);
+        $products = $productService->searchProducts($term, $request);
 
         return view('products.search', [
             'products' => $products,
@@ -104,24 +41,22 @@ class ProductsController extends Controller
     }
 
     /**
-    * Single Product Page
-    * @param slug
-    * @param ip
-    */
-    public function product($slug, Request $request) 
+     * Single Product Page
+     *
+     * @param string $slug
+     * @param Request $request
+     * @param ProductService $productService
+     * @param ActionService $actionService
+     * @return void
+     */
+    public function product($slug, Request $request, ProductService $productService, ActionService $actionService) 
     {
-        $product =  $this->products->getProduct($slug);
-        $data    = [
+        $product = $productService->findProduct($slug);
+        $actionService->storeVisit('view', $product->id, '', $request->ip());
+
+        return view('products.info', [
             'product' => $product
-        ];
-
-        $this->actions->create([
-            'type'       => 'view',
-            'product_id' => $product->id,
-            // 'visitor'    => $request->ip()
         ]);
-
-        return view('products.info', $data);
     }
 
 }

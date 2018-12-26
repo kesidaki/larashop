@@ -14,11 +14,13 @@
 				<img class="card-img-top" src="{{asset('public/thumbnail/'.$product->image)}}" alt="{{ $product->name }}">
 			</a>
 		</div>
+
 		<div class="card-body">
 			<a href="{{url('product/'.$product->slug)}}">
 				<h5 class="card-title text-center">{{$product->name}}</h5>
 			</a>
 		</div>
+		
 		<div class="card-footer">
 			@if ($product->quantity > 0)
 			<p class="availability green-text text-center">
@@ -40,17 +42,18 @@
 			</p>
 
 			@if (count($product->prices) == 1)
-				<form method="POST" action="{{url('cart')}}">
-					{{ csrf_field() }}
+				<form method="POST" action="{{ url('cart') }}">
+					@csrf
 	                <input type="hidden" name="product_id" value="{{$product->id}}">
 	                <input type="hidden" name="product_price" value="{{$product->product_price}}">
 	                <button type="submit" class="btn btn-block btn-success">
 	                    <i class="fa fa-shopping-cart"></i> Αγορά
 	                </button>
-	            </form>
+				</form>
 	        @else
 	        	<a href="{{url('product/'.$product->slug)}}" class="btn btn-block btn-success">Πληροφορίες</a>
-	        @endif
+			@endif
 		</div>
+		
 	</div>
 </div>

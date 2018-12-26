@@ -3,50 +3,47 @@
 namespace App\Http\Controllers\Website;
 
 use Illuminate\Http\Request;
-use App\Eloquent\ActionRepository;
-use App\Eloquent\ProductRepository;
 use App\Traits\CollectionManipulationTrait;
+use App\Services\ProductService;
+use App\Services\ActionService;
 
 class HomeController extends Controller
-{
-    use CollectionManipulationTrait;
-    
-    public $actions;
-    public $products;
-
-    public function __construct(ActionRepository $resAction, ProductRepository $resProducts) 
-    {
-        $this->actions  = $resAction;
-        $this->products = $resProducts;
-    }
-
+{    
     /**
-    * Website Index Page
-    */
-    public function index(Request $request) 
+     * Index Page
+     *
+     * @param Request $request
+     * @param ActionService $actionService
+     * @param ProductService $productService
+     * @return void
+     */
+    public function index(Request $request, ActionService $actionService, ProductService $productService) 
     {
-        $request->request->add(['sort' => 'recent']);
-        $products = $this->products->getProducts([], [], '', $request);
-
         $data = [
-            'mostViewed' => $this->actions->mostViewedProducts(30, 10),
-            'mostRecent' => $this->paginateData($products)
+            'mostViewed' => $actionService->mostViewedProducts(),
+            'mostRecent' => $productService->getRecentProducts($request),
         ];
 
         return view('welcome', $data);
     }
 
     /**
-    * Website Contact Us Page
-    */
+     * Contact Us
+     *
+     * @param Request $request
+     * @return void
+     */
     public function epikoinonia(Request $request) 
     {
         return view('epikoinonia', []);
     }
 
     /**
-    * Website Terms of Use Page
-    */
+     * Terms of use
+     *
+     * @param Request $request
+     * @return void
+     */
     public function oroiXrisis(Request $request) 
     {
         return view('oroi-xrisis', []);

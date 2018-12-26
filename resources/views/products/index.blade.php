@@ -1,4 +1,4 @@
-@extends('layouts.app', ['nouislider' => false])
+@extends('layouts.app')
 
 @section('content')
 

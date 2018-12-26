@@ -5,48 +5,54 @@ namespace App\Http\Controllers\Website;
 use Auth;
 use Cart;
 use Illuminate\Http\Request;
-use App\Libraries\MailLibrary;
-use App\Eloquent\OrderRepository;
 use App\Eloquent\StateRepository;
 use App\Eloquent\ShippingRepository;
-use App\Eloquent\TransactionRepository;
 use App\Http\Controllers\Website\Controller;
+use App\Services\CartService;
+use App\Http\Requests\OrderRequest;
+use App\Services\OrderService;
+use App\Services\TransactionService;
+use App\Services\MailService;
 
 class CheckoutController extends Controller
 {
-	public $shipping;
+    /**
+     * @var ShippingRepository
+     */
+    public $shipping;
+    
+    /**
+     * @var StateRepository
+     */
     public $states;
-    public $orders;
-    public $transactions;
-    public $mailing;
 
+    /**
+     * @param ShippingRepository $resShipping
+     * @param StateRepository $resState
+     */
 	public function __construct(
         ShippingRepository $resShipping, 
-        StateRepository $resState, 
-        OrderRepository $resOrder, 
-        TransactionRepository $resTransaction,
-        MailLibrary $libMail) 
+        StateRepository $resState) 
     {
         $this->shipping     = $resShipping;
         $this->states       = $resState;
-        $this->orders       = $resOrder;
-        $this->transactions = $resTransaction;
-        $this->mailing      = $libMail;
     }
 
     /**
-    * Check out Form
-    */
-    public function index() 
+     * Checkout form
+     *
+     * @param CartService $cartService
+     * @return void
+     */
+    public function index(CartService $cartService) 
     {
-    	$data = [
-			'cart'     => Cart::content(),
-			'subtotal' => Cart::subtotal(2, '.', ','),
-			'tax'      => Cart::tax(2, '.', ','),
-			'total'    => Cart::total(2, '.', ','),
-			'shipping' => $this->shipping->allBy('cost', 'asc'),
+        $cart = $cartService->getCartInfo();
+    	$info = [
+            'shipping' => $this->shipping->allBy('cost', 'asc'),
             'states'   => $this->states->allBy('name', 'asc')
-		];
+        ];
+        
+        $data = $cart + $info;
 
 		if (!count($data['cart'])) {
 			return redirect('/cart');
@@ -56,106 +62,63 @@ class CheckoutController extends Controller
     }
 
     /**
-    * Completing Payment Process
-    * @param request
-    */
-    public function complete(Request $request) 
+     * Payment Process
+     *
+     * @param OrderRequest $request
+     * @param CartService $cartService
+     * @param OrderService $orderService
+     * @param TransactionService $transactionService
+     * @param MailService $mailService
+     * @return void
+     */
+    public function complete(OrderRequest $request, CartService $cartService, OrderService $orderService, TransactionService $transactionService, MailService $mailService) 
     {
-        // Validate
-    	$rules = [
-            'name'        => 'required',
-            'address'     => 'required',
-            'tk'          => 'required',
-            'city'        => 'required',
-            'state'       => 'required',
-            'phone'       => 'required',
-            'email'       => 'required',
-            'shipping_id' => 'required',
-            'payment'     => 'required'
-        ];
-
-        if ($request->type == 'Τιμολόγιο') {
-            $rules['doy']                  = 'required';
-            $rules['afm']                  = 'required';
-            $rules['profession']           = 'required';
-        }
-
-        $this->validate($request, $rules);
-
         if ($request->payment == 'Κάρτα') {
-
+            // TODO: add payment via card (placeholder, of course!)
         }
         else {
-            return $this->store($request);
+            return $this->store($request, $cartService, $orderService, $transactionService, $mailService);
         }
     }
 
     /**
-    * Store Order
-    * @param request
-    */
-    public function store($request) 
+     * Store order data
+     *
+     * @param Request $request
+     * @param CartService $cartService
+     * @param OrderService $orderService
+     * @param TransactionService $transactionService
+     * @param MailService $mailService
+     * @return void
+     */
+    private function store(Request $request, CartService $cartService, OrderService $orderService, TransactionService $transactionService, MailService $mailService) 
     {
-        # Create order information
-        $shipping         = $this->shipping->find($request->shipping_id);
-        $data             = $request->all();
-        $data['buyer_id'] = (auth()->user()) ? auth()->user()->id : null;
-        $data['subtotal'] = Cart::subtotal();
-        $data['tax']      = Cart::tax();
-        $data['shipping'] = $shipping->cost;
-        $data['total']    = Cart::total() + $data['shipping'];
-        
-        # Create order
-        $orderId          = $this->orders->create($data);
+        $data     = $request->all();
+        $cart     = $cartService->getCartInfo();
+        $shipping = $this->shipping->find($request->shipping_id);
+        $orderId  = $orderService->makeOrder($data, $shipping->cost, $cart);
 
-        # Store Order Products
-        foreach (Cart::content() as $item) {
-            $orderData = [
-                'order_id'   => $orderId,
-                'product_id' => $item->id,
-                'quantity'   => $item->qty,
-                'total'      => $item->total
-            ];
+        $transactionService->storeCartItems($orderId, $cart['cart']);
+        $mailService->sendReceipt($data, $orderId, $cart);
 
-            $this->transactions->create($orderData);
-        }
-
-        # Send Email with order information
-        $this->mailing->send([
-            'from'    => env('SEND_FROM'),
-            'name'    => env('APP_NAME'),
-            'to'      => [
-                [
-                'Name'  => $request->name,
-                'Email' => $request->email
-                ]
-            ],
-            'subject' => 'Παραγγελία #'.$orderId.' '.env('APP_NAME'),
-            'html'    => view('mail.order-new', [
-                'order'    => $orderId,
-                'data'     => $data, 
-                'items'    => Cart::content(),
-                'subtotal' => Cart::subtotal(2, '.', ','),
-                'tax'      => Cart::tax(2, '.', ','),
-                'total'    => Cart::total(2, '.', ',')
-            ])->render()
-        ]);
-
-        # Empty cart
-        Cart::destroy();
+        $cartService->destroyCart();
 
         return redirect('checkout/details/'.$orderId);
     }
 
     /**
-    * Order Details Page
-    * @param id
-    */
-    public function details($id) 
+     * Page for order details
+     *
+     * @param int $id
+     * @param OrderService $orderService
+     * @param TransactionService $transactionService
+     * @return void
+     */
+    public function details($id, OrderService $orderService, TransactionService $transactionService) 
     {
         $data = [
-            'order'    => $this->orders->find($id),
-            'info'     => $this->transactions->getForOrder($id)
+            'order' => $orderService->findOrder($id),
+            'info'  => $transactionService->getForOrder($id),
         ];
 
         return view('checkout.details', $data);

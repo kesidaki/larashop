@@ -83,38 +83,41 @@
 			</li>
 			@endif
 
-	    </ul>
+		</ul>
+    </form>
 
 </nav>
 
-<script type="text/delayscript">
+@section('scripts')
+<script src="{{ asset('public/js/nouislider.min.js') }}"></script>
+<script>
 $(document).ready(function () {
-    $("#sidebar").mCustomScrollbar({
-        theme: "minimal"
-    });
+	$("#sidebar").mCustomScrollbar({
+		theme: "minimal"
+	});
 
-    $('#dismiss, .overlay').on('click', function () {
-        // hide sidebar
-        $('#sidebar').removeClass('active');
-        // hide overlay
-        $('.overlay').removeClass('active');
-    });
+	$('#dismiss, .overlay').on('click', function () {
+		// hide sidebar
+		$('#sidebar').removeClass('active');
+		// hide overlay
+		$('.overlay').removeClass('active');
+	});
 
-    $('#sidebarCollapse').on('click', function () {
-        // open sidebar
-        $('#sidebar').addClass('active');
-        // fade in the overlay
-        $('.overlay').addClass('active');
-        $('.collapse.in').toggleClass('in');
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-    });
+	$('#sidebarCollapse').on('click', function () {
+		// open sidebar
+		$('#sidebar').addClass('active');
+		// fade in the overlay
+		$('.overlay').addClass('active');
+		$('.collapse.in').toggleClass('in');
+		$('a[aria-expanded=true]').attr('aria-expanded', 'false');
+	});
 
-    $("input:checkbox.filter-subcategory").click(function(){
-    	generateProductsUrl();
+	$("input:checkbox.filter-subcategory").click(function(){
+		generateProductsUrl();
 	});
 
 	$("input:checkbox.filter-brand").click(function(){
-    	generateProductsUrl();
+		generateProductsUrl();
 	});
 
 	function generateProductsUrl() {
@@ -148,3 +151,4 @@ $(document).ready(function () {
 	}
 });
 </script>
+@endsection

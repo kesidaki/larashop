@@ -12,7 +12,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('public/css/minified.css') }}?1" rel="stylesheet">
+    <link href="{{ asset('public/css/app.css') }}?1" rel="stylesheet">
     <link href="{{ asset('public/css/style.css') }}?1" rel="stylesheet">
     {{-- <link href="{{ asset('public/css/app.css') }}" rel="stylesheet"> --}}
     @if ( (isset($nouislider)) && ($nouislider) )
@@ -48,64 +48,20 @@
         <div class="overlay"></div>
     </div>
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <!-- 
         Scripts 
     -->
     <!--Load Page Scripts-->
-    <script src="{{ asset('public/js/minified.js') }}?1"></script>
+    <script src="{{ asset('public/js/app.js') }}?1"></script>
     <script src="{{ asset('public/js/script.js') }}?1"></script>
-    {{-- <script src="{{ asset('js/app.js') }}?1"></script> --}}
     <!-- jQuery Custom Scroller CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
     @if (Auth::check() && Auth::user()->isAdmin())
-        <!--Load Admin Scripts-->
         <script src="{{ asset('public/js/admin.js') }}"></script>
     @endif
 
-    <!--Load NoUISlider-->
-    @if ( (isset($nouislider)) && ($nouislider) )
-        <script src="{{ asset('public/js/nouislider.min.js') }}"></script>
-    @endif
-
-    <!--Load ChartJS-->
-    @if ( (isset($chart)) && ($chart) )
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    @endif
-
-    <!--Lazy Load Page Scripts-->
-    <script>
-        var _scripts = document.getElementsByTagName("script"), _doc = document, _txt = "text/delayscript";
-
-        for(var i=0,l=_scripts.length;i<l;i++){
-            var _type = _scripts[i].getAttribute("type");
-            if(_type && _type.toLowerCase() ==_txt)
-            _scripts[i].parentNode.replaceChild((function(sB){
-            var _s = _doc.createElement('script');
-            _s.type = 'text/javascript';
-            _s.innerHTML = sB.innerHTML;
-            return _s;
-            })(_scripts[i]), _scripts[i]);
-        }
-    </script>
-
-    @if ( (isset($tinymce)) && ($tinymce) )
-        <!--Load TinyMCE when needed-->
-        <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
-        <script>
-            tinymce.init({ 
-                selector:'.tinymce',
-                entity_encoding: 'raw',
-                theme: 'modern',
-                image_advtab: true,
-                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link',
-                plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table contextmenu paste code'
-                ]
-            });
-        </script>
-    @endif
+    @yield('scripts')
 </body>
 </html>
